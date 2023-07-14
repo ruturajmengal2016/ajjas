@@ -1,0 +1,12 @@
+.root {
+  height: 70%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  overflow: auto;
+  border-top: 1px solid gray;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 1rem;
+  gap: 0.5rem;
+}
