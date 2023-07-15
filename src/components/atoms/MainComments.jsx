@@ -9,7 +9,9 @@ import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { addReplies } from "../../utils/slice";
+import { addReplies, fav } from "../../utils/slice";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 export default function MainComments() {
   const data = useSelector((state) => state.comments.comments);
   return (
@@ -47,8 +49,35 @@ function CommentBox({ data }) {
           gap: "1rem",
         }}
       >
-        <Typography variant="h5" component="h5">
+        <Typography
+          variant="h5"
+          component="h5"
+          sx={{ display: "flex", justifyContent: "space-between" }}
+        >
           {data.title}
+          <span
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <IconButton
+              onClick={() => {
+                dispatch(fav({ type: "like", title: data.title }));
+              }}
+            >
+              <ThumbUpIcon color="success" />
+            </IconButton>
+            <span>{data.like}</span>
+            <IconButton
+              onClick={() => {
+                dispatch(fav({ like: "dislike", title: data.title }));
+              }}
+            >
+              <ThumbDownIcon color="error" />
+            </IconButton>
+          </span>
         </Typography>
         <Box>{data.description}</Box>
         <Box
@@ -90,9 +119,13 @@ function CommentBox({ data }) {
                   sx={{
                     textTransform: "none",
                   }}
-                  onClick={() => {
-                    dispatch(addReplies({ description: value }));
-                    handleClose();
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (value) {
+                      dispatch(addReplies({ description: value }));
+                      setReply(false);
+                    }
+                    setReply(false);
                   }}
                 >
                   save
